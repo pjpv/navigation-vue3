@@ -1,3 +1,4 @@
+const REGX_CHROME_EXTENSION = /^chrome-extension:\/\//
 export const throttle = (fn: any, delay: number) => {
   let timer: any
   return function () {
@@ -20,7 +21,6 @@ export const uuid = () => {
   })
 }
 
-
 export const openUrlWithJS = (url: string, isNewWin: boolean = false) => {
   const a = document.createElement('a')
   a.style.display = 'none'
@@ -35,7 +35,7 @@ export const openUrlWithChrome = (url: string, isNewWin: boolean = false) => {
   //@ts-ignore
   // eslint-disable-next-line
   const tabs = chrome.tabs
-  if (isNewWin) {
+  if (isNewWin || REGX_CHROME_EXTENSION.test(url)) {
     tabs.create({ url })
   } else {
     tabs.getCurrent((e: any) => {
