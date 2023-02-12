@@ -25,7 +25,7 @@ const props = defineProps<{
 
 const REG_HTTP = new RegExp(/^http:\/\/.+/)
 const REG_HTTPS = new RegExp(/^https:\/\/.+/)
-const REG_URL = new RegExp(/^([a-zA-z]+:\/\/)(.+)/)
+const REG_URL = new RegExp(/^([a-zA-z-]+:\/\/)(.+)/)
 
 const onClick = (e: any) => {
   const newWin = e.ctrlKey
