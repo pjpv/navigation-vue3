@@ -75,3 +75,18 @@ npm run test:e2e -- --debug
 ```sh
 npm run lint
 ```
+
+
+
+# 错误处理
+
+playwright 安装报错 ```Error: unable to verify the first certificate```
+
+关闭 node https 模块 SSL验证
+```javascript
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+```
+文件地址
+```
+node_modules/.pnpm/playwright-core@1.30.0/node_modules/playwright-core/lib/server/registry/oopDownloadMain.js
+```
