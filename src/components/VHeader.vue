@@ -96,6 +96,12 @@ const handleConfirm = () => {
 </script>
 
 <style scoped lang="less">
+.v-header {
+  max-width: 1224px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 .left {
 
 }
