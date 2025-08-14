@@ -39,13 +39,13 @@ jobs:
           restore-keys: |
             build-cache-${{ steps.pm.outputs.manager }}-
 
-      # 4️⃣ 安裝 Node.js
+      # 4️⃣ 安裝 Node.js v18
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
-      # 5️⃣ 安裝 package manager（只在第一次或沒快取時）
+      # 5️⃣ 安裝 package manager
       - name: Setup package manager
         run: |
           if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
@@ -54,7 +54,7 @@ jobs:
             npm install -g yarn
           fi
 
-      # 6️⃣ 安裝依賴（lockfile 沒變快取命中，瞬間完成）
+      # 6️⃣ 安裝依賴
       - name: Install dependencies
         run: |
           if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
