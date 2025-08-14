@@ -49,7 +49,7 @@ jobs:
       - name: Setup package manager
         run: |
           if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
-            npm install -g pnpm
+            npm install -g pnpm@6
           elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then
             npm install -g yarn
           fi
