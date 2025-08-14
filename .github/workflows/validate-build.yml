@@ -24,6 +24,7 @@ jobs:
             echo "manager=yarn" >> $GITHUB_OUTPUT
           else
             echo "manager=npm" >> $GITHUB_OUTPUT
+          fi
 
       # 3️⃣ 快取 Node.js、package manager 與依賴
       - name: Cache Node & dependencies
