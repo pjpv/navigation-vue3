@@ -1,0 +1,83 @@
+name: Validate Build Instant
+
+on:
+  push:
+    branches:
+      - main  # 或你要檢查的分支
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ 檢出程式碼
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2️⃣ 偵測 package manager
+      - name: Detect package manager
+        id: pm
+        run: |
+          if [ -f "pnpm-lock.yaml" ]; then
+            echo "manager=pnpm" >> $GITHUB_OUTPUT
+          elif [ -f "yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+          else
+            echo "manager=npm" >> $GITHUB_OUTPUT
+
+      # 3️⃣ 快取 Node.js、package manager 與依賴
+      - name: Cache Node & dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            ~/.pnpm-store
+            ~/.cache/yarn
+            ~/.nvm
+          key: build-cache-${{ steps.pm.outputs.manager }}-${{ hashFiles('package-lock.json','yarn.lock','pnpm-lock.yaml') }}
+          restore-keys: |
+            build-cache-${{ steps.pm.outputs.manager }}-
+
+      # 4️⃣ 安裝 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      # 5️⃣ 安裝 package manager（只在第一次或沒快取時）
+      - name: Setup package manager
+        run: |
+          if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
+            npm install -g pnpm
+          elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then
+            npm install -g yarn
+          fi
+
+      # 6️⃣ 安裝依賴（lockfile 沒變快取命中，瞬間完成）
+      - name: Install dependencies
+        run: |
+          if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
+            pnpm install --frozen-lockfile
+          elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then
+            yarn install --frozen-lockfile
+          else
+            npm ci
+
+      # 7️⃣ 執行 build
+      - name: Run build
+        run: |
+          if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
+            pnpm build
+          elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then
+            yarn build
+          else
+            npm run build
+
+      # 8️⃣ 顯示結果
+      - name: Notify result
+        if: success()
+        run: echo "✅ Build succeeded!"
+
+      - name: Notify result
+        if: failure()
+        run: echo "❌ Build failed!"
