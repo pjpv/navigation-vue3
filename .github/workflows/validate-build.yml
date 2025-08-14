@@ -34,7 +34,6 @@ jobs:
             ~/.npm
             ~/.pnpm-store
             ~/.cache/yarn
-            ~/.nvm
           key: build-cache-${{ steps.pm.outputs.manager }}-${{ hashFiles('package-lock.json','yarn.lock','pnpm-lock.yaml') }}
           restore-keys: |
             build-cache-${{ steps.pm.outputs.manager }}-
@@ -81,8 +80,7 @@ jobs:
       # 8️⃣ 顯示結果
       - name: Notify result
         if: success()
-        run: echo "✅ Build succeeded!"
-
-      - name: Notify result
+        run: echo "::notice ::✅ Build succeeded!"
+      - name: Notify failure
         if: failure()
-        run: echo "❌ Build failed!"
+        run: echo "::error ::❌ Build failed!"
