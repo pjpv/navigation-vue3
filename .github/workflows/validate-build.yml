@@ -56,6 +56,7 @@ jobs:
 
       # 6️⃣ 安裝依賴
       - name: Install dependencies
+        working-directory: .  # lockfile 所在目錄
         run: |
           if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
             pnpm install --frozen-lockfile
@@ -67,6 +68,7 @@ jobs:
 
       # 7️⃣ 執行 build
       - name: Run build
+        working-directory: .  # lockfile 所在目錄
         run: |
           if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
             pnpm build
