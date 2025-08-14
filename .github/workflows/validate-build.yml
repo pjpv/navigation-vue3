@@ -62,6 +62,7 @@ jobs:
             yarn install --frozen-lockfile
           else
             npm ci
+          fi
 
       # 7️⃣ 執行 build
       - name: Run build
@@ -72,6 +73,7 @@ jobs:
             yarn build
           else
             npm run build
+          fi
 
       # 8️⃣ 顯示結果
       - name: Notify result
