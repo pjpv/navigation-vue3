@@ -20,7 +20,6 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "actionstest": "99.99",
     "@playwright/test": "^1.30.0",
     "@rushstack/eslint-patch": "^1.1.4",
     "@types/jsdom": "^20.0.1",

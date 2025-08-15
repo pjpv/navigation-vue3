@@ -7,6 +7,7 @@ on:
 
 jobs:
   build:
+    environment: dev
     runs-on: ubuntu-latest
 
     steps:
@@ -80,7 +81,13 @@ jobs:
       # 8️⃣ 顯示結果
       - name: Notify result
         if: success()
-        run: echo "::notice ::✅ Build succeeded!"
+        run: |
+          curl -s -H "Content-Type: application/json" \
+            -d '{"msgtype":"text","text":{"content":"✅ Build succeeded!"}}' \
+            https://oapi.dingtalk.com/robot/send?access_token=${{ secrets.DINGTALK_WEBHOOK }}
       - name: Notify failure
         if: failure()
-        run: echo "::error ::❌ Build failed!"
+        run: |
+          curl -s -H "Content-Type: application/json" \
+            -d '{"msgtype":"text","text":{"content":"❌ Build failed!"}}' \
+            https://oapi.dingtalk.com/robot/send?access_token=${{ secrets.DINGTALK_WEBHOOK }}
