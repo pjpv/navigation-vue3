@@ -83,11 +83,21 @@ jobs:
         if: success()
         run: |
           curl -s -H "Content-Type: application/json" \
-            -d '{"msgtype":"text","text":{"content":"✅ Build succeeded!"}}' \
+            -d "{
+              \"msgtype\": \"text\",
+              \"text\": {
+                \"content\": \"✅ Build succeeded!\n📦 Repo: ${{ github.repository }}\n🌿 Branch: ${{ github.ref_name }}\n🔗 Commit: ${{ github.sha }}\n🔍 Message: ${{ github.event.head_commit.message }}\n🔗 Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+              }
+            }" \
             https://oapi.dingtalk.com/robot/send?access_token=${{ secrets.DINGTALK_WEBHOOK }}
       - name: Notify failure
         if: failure()
         run: |
           curl -s -H "Content-Type: application/json" \
-            -d '{"msgtype":"text","text":{"content":"❌ Build failed!"}}' \
+            -d "{
+              \"msgtype\": \"text\",
+              \"text\": {
+                \"content\": \"❌ Build failed!\n📦 Repo: ${{ github.repository }}\n🌿 Branch: ${{ github.ref_name }}\n🔗 Commit: ${{ github.sha }}\n🔍 Error:\n$ERROR_MSG\n🔗 Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+              }
+            }" \
             https://oapi.dingtalk.com/robot/send?access_token=${{ secrets.DINGTALK_WEBHOOK }}
