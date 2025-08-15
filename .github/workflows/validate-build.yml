@@ -5,6 +5,10 @@ on:
     branches:
       - main  # 或你要檢查的分支
 
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     environment: dev
